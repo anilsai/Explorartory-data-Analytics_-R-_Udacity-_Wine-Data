@@ -3,8 +3,8 @@ title: "RedWine"
 insauthor: Anil S Bodepudi
 date: "12/16/2017"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 ---
 
 ```{r}
@@ -214,27 +214,31 @@ Here box plots are used to represent categorical values.
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 quality_plot <- function (x, y, ylab) {
-return (ggplot(data = wd, aes_string(as.factor(x),y)) +
+return (ggplot(data = wd, aes_string(x,y)) +
 geom_boxplot(fill = 'green') +
 xlab ('quality') + ylab(ylab))
 
 }
 
-grid.arrange( quality_plot( 'quality', 'fixed.acidity', 'fixed.acidity(g/dm^3)'), 
-quality_plot('quality', 'volatile.acidity', 'volatile.acidity(g/dm^3)'),
-quality_plot('quality', 'citric.acid', 'citric.acid (g / dm^3)'),
-quality_plot('quality', 'residual.sugar', 'residual.sugar (g / dm^3)'),
-quality_plot('quality', 'chlorides', 'chlorides (g / dm^3)'),
-quality_plot('quality', 'free.sulfur.dioxide', 'free.sulphur.dioxide (g / dm^3)'),
-quality_plot('quality', 'total.sulfur.dioxide', 'total.sulphur.dioxide (g / dm^3)'),
-quality_plot('quality', 'density', 'density (g/cm^3)'),
-quality_plot('quality', 'pH', 'pH'),
-quality_plot('quality', 'sulphates', 'sulphates (g/dm^3)'),
-quality_plot('quality', 'alcohol', 'alcohol (volume %)'),
+grid.arrange( quality_plot( 'factor(quality)', 'fixed.acidity',
+                            'fixed.acidity(g/dm^3)'), 
+quality_plot('factor(quality)', 'volatile.acidity', 'volatile.acidity(g/dm^3)'),
+quality_plot('factor(quality)', 'citric.acid', 'citric.acid (g / dm^3)'),
+quality_plot('factor(quality)', 'residual.sugar', 'residual.sugar (g / dm^3)'),
+quality_plot('factor(quality)', 'chlorides', 'chlorides (g / dm^3)'),
+quality_plot('factor(quality)', 'free.sulfur.dioxide', 
+             'free.sulphur.dioxide (g / dm^3)'),
+quality_plot('factor(quality)', 'total.sulfur.dioxide',
+             'total.sulphur.dioxide (g / dm^3)'),
+quality_plot('factor(quality)', 'density', 'density (g/cm^3)'),
+quality_plot('factor(quality)', 'pH', 'pH'),
+quality_plot('factor(quality)', 'sulphates', 'sulphates (g/dm^3)'),
+quality_plot('factor(quality)', 'alcohol', 'alcohol (volume %)'),
  
 ncol= 4)
 
 ```
+
 
 
 ## BoxPlot of rating 
@@ -246,17 +250,17 @@ rating_plot <- function(x, y, ylab) {
   xlab('rating') + ylab(ylab))
 }
 
-grid.arrange( rating_plot( 'quality', 'fixed.acidity', 'fixed.acidity(g/dm^3)'), 
-rating_plot('quality', 'volatile.acidity', 'volatile.acidity(g/dm^3)'),
-rating_plot('quality', 'citric.acid', 'citric.acid (g / dm^3)'),
-rating_plot('quality', 'residual.sugar', 'residual.sugar (g / dm^3)'),
-rating_plot('quality', 'chlorides', 'chlorides (g / dm^3)'),
-rating_plot('quality', 'free.sulfur.dioxide', 'free.sulphur.dioxide (g / dm^3)'),
-rating_plot('quality', 'total.sulfur.dioxide', 'total.sulphur.dioxide (g / dm^3)'),
-rating_plot('quality', 'density', 'density (g/cm^3)'),
-rating_plot('quality', 'pH', 'pH'),
-rating_plot('quality', 'sulphates', 'sulphates (g/dm^3)'),
-rating_plot('quality', 'alcohol', 'alcohol (volume %)'),
+grid.arrange( rating_plot( 'factor(quality)', 'fixed.acidity', 'fixed.acidity(g/dm^3)'), 
+rating_plot('factor(quality)', 'volatile.acidity', 'volatile.acidity(g/dm^3)'),
+rating_plot('factor(quality)', 'citric.acid', 'citric.acid (g / dm^3)'),
+rating_plot('factor(quality)', 'residual.sugar', 'residual.sugar (g / dm^3)'),
+rating_plot('factor(quality)', 'chlorides', 'chlorides (g / dm^3)'),
+rating_plot('factor(quality)', 'free.sulfur.dioxide', 'free.sulphur.dioxide (g / dm^3)'),
+rating_plot('factor(quality)', 'total.sulfur.dioxide', 'total.sulphur.dioxide (g / dm^3)'),
+rating_plot('factor(quality)', 'density', 'density (g/cm^3)'),
+rating_plot('factor(quality)', 'pH', 'pH'),
+rating_plot('factor(quality)', 'sulphates', 'sulphates (g/dm^3)'),
+rating_plot('factor(quality)', 'alcohol', 'alcohol (volume %)'),
  
 ncol= 4)
 ```
@@ -365,18 +369,18 @@ The relationship between the variables total.sulfur.dioxide and free.sulfur.diox
 ```{r}
 ggplot(data = wd,
        aes(x = citric.acid, y = volatile.acidity,
-           color = quality)) +
+           color = factor(quality))) +
   geom_point() +
   facet_wrap(~rating)
 
 ggplot(data = wd,
        aes(x = alcohol, y = log10(sulphates),
-           color = quality)) +
+           color = factor(quality))) +
   geom_point() +
   facet_wrap(~rating)
 
 ggplot(data = wd,
-       aes(x = pH, y = alcohol, color = quality)) +
+       aes(x = pH, y = alcohol, color = factor(quality))) +
   geom_point() +
   facet_wrap(~rating)
 ```
