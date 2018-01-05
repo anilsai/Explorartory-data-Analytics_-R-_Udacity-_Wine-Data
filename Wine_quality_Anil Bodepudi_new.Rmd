@@ -6,9 +6,11 @@ output:
   pdf_document: default
   html_document: default
 ---
-
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+```
 ```{r}
-knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
 library(ggplot2)
 library(GGally)
 library(scales)
@@ -33,6 +35,7 @@ There are 1599 observations with 13 different variables. X is a unique identifie
 
   Here we are primary concerned with wine quality, so lets start with some basic plots.  
 ```{r}
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
 ggplot(aes(as.factor(quality),fill= factor(quality)), data = wd) + geom_bar() +
   theme_replace() + xlab("quality")+
   scale_fill_brewer(type = 'seq',guide=guide_legend(title = 'Quality'))
@@ -61,7 +64,7 @@ ggplot(aes(as.factor(quality),fill= factor(quality)), data = wd) + geom_bar() +
 
 * 7-10 :ideal  
 
-```{r,echo=TRUE, message=FALSE, warning=FALSE}
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
 wd$rating <- ifelse(wd$quality <5, 'bad', ifelse( wd$quality<7, 'average','good'))
 wd$rating<- ordered(wd$rating, levels = c('bad','average','good'))
 summary(wd$rating)
@@ -115,7 +118,7 @@ grid.arrange(qplot(wd$fixed.acidity),
 * Citric acid have many zero values,looks like there is some error in reporting but I am curious to know.  
 
   Since fixed and volatile acidity are long tailed I plotted them in log10 scale and found them to be normally distributed.  
-```{r, echo=TRUE, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ggplot(data= wd,aes(x=fixed.acidity))+geom_histogram(binwidth = 0.4)
 summary(wd$fixed.acidity)
 ggplot(data= wd,aes(x=volatile.acidity))+geom_histogram(binwidth = 0.1)
@@ -126,7 +129,7 @@ ggplot(data= wd,aes(x=volatile.acidity))+geom_histogram(binwidth = 0.1)
  
   Similarly I plotted citric acid and sulphates to find out if they are normally distributed but found out only sulphates are normally distributed. 
   
-```{r, echo = TRUE, message=FALSE, warning=FALSE}
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
 ggplot(data= wd,aes(x=sulphates))+geom_histogram() 
 ggplot(data= wd,aes(x=citric.acid))+geom_histogram()
 ```  
@@ -134,6 +137,7 @@ ggplot(data= wd,aes(x=citric.acid))+geom_histogram()
 Further investigating the data on total number of zero entries I found that there are 132 in total.  
 
 ```{r}
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
 length(subset(wd, citric.acid==0)$citric.acid)
 ```
 
@@ -158,7 +162,7 @@ ggplot(data=wd,aes(x=chlorides)) + geom_histogram() +
 #Questions
 
 **What is the structure of your dataset?**
-```{r, echo=TRUE, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 str(wd)
 ```
 **Did you create any new variables from existing variables in the dataset?**
@@ -256,7 +260,8 @@ rating_plot('factor(quality)', 'citric.acid', 'citric.acid (g / dm^3)'),
 rating_plot('factor(quality)', 'residual.sugar', 'residual.sugar (g / dm^3)'),
 rating_plot('factor(quality)', 'chlorides', 'chlorides (g / dm^3)'),
 rating_plot('factor(quality)', 'free.sulfur.dioxide', 'free.sulphur.dioxide (g / dm^3)'),
-rating_plot('factor(quality)', 'total.sulfur.dioxide', 'total.sulphur.dioxide (g / dm^3)'),
+rating_plot('factor(quality)', 'total.sulfur.dioxide', 
+            'total.sulphur.dioxide (g / dm^3)'),
 rating_plot('factor(quality)', 'density', 'density (g/cm^3)'),
 rating_plot('factor(quality)', 'pH', 'pH'),
 rating_plot('factor(quality)', 'sulphates', 'sulphates (g/dm^3)'),
@@ -319,7 +324,8 @@ ggplot( data = wd, aes(x= log10(sulphates), y= alcohol, color =sulphates )) +
   facet_wrap(~rating) +
   geom_point()
 
-ggplot(data = wd, aes(x = volatile.acidity, y = alcohol, color =volatile.acidity )) +
+ggplot(data = wd, aes(x = volatile.acidity, 
+                      y = alcohol, color =volatile.acidity )) +
   facet_wrap(~rating) +
   geom_point()
 
@@ -331,11 +337,13 @@ ggplot(data = wd, aes(x = volatile.acidity, y = log10(sulphates), color =volatil
   facet_wrap(~rating) +
   geom_point()
 
-ggplot(data = wd, aes(x = citric.acid, y = log10(sulphates), color = citric.acid)) +
+ggplot(data = wd, aes(x = citric.acid,
+                      y = log10(sulphates), color = citric.acid)) +
   facet_wrap(~rating) +
   geom_point()
 
-ggplot(data = wd, aes(x = citric.acid, y = volatile.acidity, color = citric.acid)) +
+ggplot(data = wd, aes(x = citric.acid, y = volatile.acidity,
+                      color = citric.acid)) +
   facet_wrap(~rating) +
   geom_point()
 ```
@@ -463,25 +471,25 @@ From the above plot it is clear that wine quality increases with % of alcohol in
 
 ```{r, message=FALSE, warning=FALSE}
 grid.arrange(ggplot(data = wd, aes(x = factor(quality),y =fixed.acidity,
-                                   fill = quality)) + 
+                                   fill = factor(quality)))+ 
                ylab('Fixed Acidity (g/dm^3)') +
                xlab('Quality') +
-               geom_boxplot(),
+               geom_boxplot()+ ggtitle('Fixed Acidity on Wine Quality'),
              ggplot(data = wd, aes(x = factor(quality),y = volatile.acidity,
-                                   fill = quality)) +
+                                   fill = factor(quality)))+
                ylab('Volatile Acidity (g/dm^3)') +
                xlab('Quality') +
-               geom_boxplot(), 
+               geom_boxplot() + ggtitle('Volatile Acidity on Wine Quality'), 
              ggplot(data = wd, aes(x = factor(quality), y = citric.acid,
-                                   fill = quality)) +
+                                  fill = factor(quality))) +
                ylab('Citric Acid (g/dm^3)') +
                xlab('Quality') +
-               geom_boxplot(), 
+               geom_boxplot()+ ggtitle('Citric Acid on Wine Quality'), 
              ggplot(data = wd, aes(x = factor(quality), y = pH,
-                                   fill = quality)) +
+                                   fill = factor(quality))) +
                ylab('pH') +
                xlab('Quality') +
-               geom_boxplot())
+               geom_boxplot()+ ggtitle('pH on Wine Quality') )
 
 
 ```
